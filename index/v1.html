@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <script>
+  if (sessionStorage.getItem("v1_allowed") !== "yes") {
+    location.href = "../index.html";
+  }
+</script>
+
   <meta charset="UTF-8">
   <style>
     body {
