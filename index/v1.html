@@ -177,8 +177,8 @@
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' },
     ];
 
-    // 日付順でソート
-    videoData.sort((a, b) => new Date(b.date) - new Date(a.date));
+// 日付順でソート（古い順）
+videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     // 動画リストを生成
     const videoList = document.getElementById('videoList');
