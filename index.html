@@ -9,6 +9,7 @@
       color: #333;
       padding: 40px;
       transition: background-color 0.3s, color 0.3s;
+      position: relative;
     }
 
     .container {
@@ -85,10 +86,15 @@
     }
 
     .version {
-      text-align: center;
-      margin-top: 20px;
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 5px 10px;
       font-size: 14px;
-      color: #666;
+      color: #333;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
     @media (prefers-color-scheme: dark) {
@@ -123,6 +129,11 @@
         color: #e0e0e0;
         border: 1px solid #444;
       }
+
+      .version {
+        background-color: rgba(30, 30, 30, 0.7);
+        color: #e0e0e0;
+      }
     }
   </style>
 </head>
@@ -137,10 +148,10 @@
     <div class="contact">
       お問い合わせ: <a href="mailto:ii45iiy@gmail.com">email</a>
     </div>
+  </div>
 
-    <div class="version">
-      バージョン: 0.4.2
-    </div>
+  <div class="version">
+    バージョン: 0.4.2
   </div>
 
   <script>
@@ -161,6 +172,7 @@
       { date: '2021/03/05', title: '大量の霊夢と魔理沙を戦わせてみた②【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/79yDxt4EZ2A' },
       { date: '2021/04/22', title: 'シャイガイを消せ！⑤【GMOD ゆっくり劇場】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/qdHLslqnwHU' },
       { date: '2021/04/29', title: 'CLASS-D職員100人で最後までシャイガイから逃げ切ったら100万円【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/rQVuWIexmX0' },
+      { date: '2021/05/01', title: 'タイトル不明（リンクあり）', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/l4HW0hbRbkU' },
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' }
     ];
 
