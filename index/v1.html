@@ -10,7 +10,7 @@
       padding: 40px;
       transition: background-color 0.3s, color 0.3s;
       position: relative;
-      padding-bottom: 80px; /* 下部余白を確保 */
+      padding-bottom: 120px; /* 下部余白を確保 */
     }
 
     .container {
@@ -76,19 +76,19 @@
       transform: scale(1);
     }
 
-    .contact {
+    .contact, .citation {
       text-align: center;
       margin-top: 60px;
       font-size: 16px;
       color: #666;
     }
 
-    .contact a {
+    .contact a, .citation a {
       color: #007acc;
       text-decoration: none;
     }
 
-    .contact a:hover {
+    .contact a:hover, .citation a:hover {
       text-decoration: underline;
     }
 
@@ -111,11 +111,11 @@
         background-color: #2a2a2a;
       }
 
-      .contact {
+      .contact, .citation {
         color: #aaa;
       }
 
-      .contact a {
+      .contact a, .citation a {
         color: #5ab4ff;
       }
 
@@ -149,6 +149,10 @@
 
   <div class="contact">
     お問い合わせ: <a href="mailto:ii45iiy@gmail.com">ii45iiy@gmail.com</a>
+  </div>
+
+  <div class="citation">
+    <p>引用元: <a href="https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/" target="_blank">Wayback Machine</a></p>
   </div>
 
   <script>
