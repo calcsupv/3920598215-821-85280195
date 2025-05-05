@@ -84,6 +84,13 @@
       text-decoration: underline;
     }
 
+    .version {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+
     @media (prefers-color-scheme: dark) {
       body {
         background-color: #121212;
@@ -130,6 +137,10 @@
     <div class="contact">
       お問い合わせ: <a href="mailto:ii45iiy@gmail.com">email</a>
     </div>
+
+    <div class="version">
+      バージョン: 0.4.2
+    </div>
   </div>
 
   <script>
@@ -153,15 +164,15 @@
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' }
     ];
 
-    // 日付順にソート
-    videoData.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // 日付順でソート
+    videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    // 動画リストを動的に生成
-    const videoList = document.getElementById("videoList");
+    // 動画カード作成
+    const videoList = document.getElementById('videoList');
     videoData.forEach(video => {
-      const card = document.createElement("div");
-      card.classList.add("card");
-      const link = document.createElement("a");
+      const card = document.createElement('div');
+      card.classList.add('card');
+      const link = document.createElement('a');
       link.href = video.url;
       link.target = "_blank";
       link.textContent = `${video.date} - ${video.title}`;
