@@ -20,10 +20,13 @@
     .search-box {
       margin-bottom: 30px;
       text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
     }
 
-    .search-box input {
-      width: 80%;
+    .search-box input,
+    .search-box select {
       padding: 12px;
       font-size: 16px;
       border-radius: 8px;
@@ -31,7 +34,8 @@
       transition: border-color 0.2s;
     }
 
-    .search-box input:focus {
+    .search-box input:focus,
+    .search-box select:focus {
       outline: none;
       border-color: #007acc;
     }
@@ -118,7 +122,8 @@
         color: #5ab4ff;
       }
 
-      .search-box input {
+      .search-box input,
+      .search-box select {
         background-color: #1e1e1e;
         color: #e0e0e0;
         border: 1px solid #444;
@@ -130,6 +135,10 @@
   <div class="container">
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="動画タイトルを検索...">
+      <select id="dateFilter">
+        <option value="">すべての日付</option>
+        <!-- 日付のオプションはJavaScriptで動的に挿入します -->
+      </select>
     </div>
 
     <div id="videoList"></div>
@@ -164,32 +173,55 @@
     // 日付順でソート
     videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
+    // 日付のフィルタリングオプションを作成
+    const dateFilter = document.getElementById("dateFilter");
+    const allDates = [...new Set(videoData.map(video => video.date))];
+    allDates.forEach(date => {
+      const option = document.createElement("option");
+      option.value = date;
+      option.textContent = date;
+      dateFilter.appendChild(option);
+    });
+
     // 動画カード作成
     const videoList = document.getElementById('videoList');
-    videoData.forEach(video => {
-      const card = document.createElement('div');
-      card.classList.add('card');
-      const link = document.createElement('a');
-      link.href = video.url;
-      link.target = "_blank";
-      link.textContent = `${video.date} - ${video.title}`;
-      card.appendChild(link);
-      videoList.appendChild(card);
-    });
+    function createVideoCards(filteredData) {
+      videoList.innerHTML = ''; // 既存のカードを削除
+      filteredData.forEach(video => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        const link = document.createElement('a');
+        link.href = video.url;
+        link.target = "_blank";
+        link.textContent = `${video.date} - ${video.title}`;
+        card.appendChild(link);
+        videoList.appendChild(card);
+      });
+    }
+
+    // 初期表示
+    createVideoCards(videoData);
 
     // 検索機能
     const searchInput = document.getElementById("searchInput");
     searchInput.addEventListener("input", function() {
       const query = searchInput.value.toLowerCase();
-      const cards = document.querySelectorAll(".card");
-      cards.forEach(card => {
-        const title = card.querySelector("a").textContent.toLowerCase();
-        if (title.includes(query)) {
-          card.classList.remove("hide");
-        } else {
-          card.classList.add("hide");
-        }
-      });
+      const filteredData = videoData.filter(video =>
+        video.title.toLowerCase().includes(query)
+      );
+      createVideoCards(filteredData);
+    });
+
+    // 日付フィルタリング機能
+    dateFilter.addEventListener("change", function() {
+      const selectedDate = dateFilter.value;
+      let filteredData = videoData;
+
+      if (selectedDate) {
+        filteredData = videoData.filter(video => video.date === selectedDate);
+      }
+
+      createVideoCards(filteredData);
     });
   </script>
 </body>
