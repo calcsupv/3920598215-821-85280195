@@ -28,7 +28,7 @@
       font-size: 16px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background-color 0.2s;
     }
 
     .search-box input:focus {
@@ -73,6 +73,11 @@
 
     .card a:active {
       transform: scale(1);
+    }
+
+    .card:hover {
+      background-color: #f0f0f0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .contact {
