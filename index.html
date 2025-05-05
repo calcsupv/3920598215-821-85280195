@@ -2,14 +2,32 @@
   alert("著作権的にほぼアウトなので自己責任で見てください");
 
   fetch("index/v1.html")
-    .then(response => response.text())
+    .then(res => res.text())
     .then(html => {
-      document.body.innerHTML = html;
+      // 仮のDOMを使ってパース
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+
+      // bodyの中身を置き換え
+      document.body.innerHTML = doc.body.innerHTML;
+
+      // スクリプトを再実行（動的に再生成して挿入）
+      const scripts = doc.querySelectorAll("script");
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement("script");
+        if (oldScript.src) {
+          newScript.src = oldScript.src;
+        } else {
+          newScript.textContent = oldScript.textContent;
+        }
+        document.body.appendChild(newScript);
+      });
     })
-    .catch(error => {
-      document.body.innerHTML = "<p>読み込みに失敗しました。</p>";
-      console.error(error);
+    .catch(err => {
+      console.error("読み込みエラー:", err);
+      document.body.innerHTML = "<h1>読み込みに失敗しました</h1>";
     });
 </script>
+
 
 // 基本的にv1を使うが、v2に切り替えるには"index/v1.html";を"index/v2.html";に
