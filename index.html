@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>main</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <style>
-    body, html {
+    html, body {
       margin: 0;
       padding: 0;
       height: 100%;
+      background-color: black; /* スマホの白チラ防止 */
     }
     iframe {
       width: 100%;
       height: 100vh;
       border: none;
+      display: none;
     }
   </style>
 </head>
@@ -21,8 +24,8 @@
     alert("著作権的にほぼアウトなので自己責任で見てください");
     const iframe = document.createElement("iframe");
     iframe.src = "index/v1.html";
+    iframe.onload = () => iframe.style.display = "block";
     document.body.appendChild(iframe);
   </script>
 </body>
 </html>
-// v1.html v2.html
