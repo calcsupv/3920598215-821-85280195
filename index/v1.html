@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <script>
+  <<script>
   if (sessionStorage.getItem("v1_allowed") !== "yes") {
-    location.href = "../index.html";
+    document.body.innerHTML = '';  // ページ内容を消去
+    setTimeout(() => {
+      location.href = "../index.html";  // index.html にリダイレクト
+    }, 100);  // 少し待機してからリダイレクト
   }
 </script>
+
 
   <meta charset="UTF-8">
   <style>
