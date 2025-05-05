@@ -44,6 +44,7 @@
       transition: transform 0.2s ease, background-color 0.3s, opacity 0.3s ease;
       opacity: 1;
       pointer-events: auto;
+      padding: 20px;
     }
 
     .card.hide {
@@ -58,15 +59,20 @@
 
     .card a {
       display: block;
-      padding: 20px;
       text-decoration: none;
       color: #333;
       font-size: 20px;
       font-weight: bold;
+      transition: transform 0.2s ease, color 0.2s ease;
     }
 
     .card a:hover {
-      background-color: #f0f0f0;
+      color: #007acc;
+      transform: scale(1.05);
+    }
+
+    .card a:active {
+      transform: scale(1);
     }
 
     .contact {
@@ -83,19 +89,6 @@
 
     .contact a:hover {
       text-decoration: underline;
-    }
-
-    .version {
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      background-color: rgba(255, 255, 255, 0.7);
-      padding: 5px 10px;
-      font-size: 14px;
-      color: #333;
-      border-radius: 5px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      z-index: 1000; /* 前面に表示 */
     }
 
     @media (prefers-color-scheme: dark) {
@@ -130,11 +123,6 @@
         color: #e0e0e0;
         border: 1px solid #444;
       }
-
-      .version {
-        background-color: rgba(30, 30, 30, 0.7);
-        color: #e0e0e0;
-      }
     }
   </style>
 </head>
@@ -149,10 +137,6 @@
     <div class="contact">
       お問い合わせ: <a href="mailto:ii45iiy@gmail.com">email</a>
     </div>
-  </div>
-
-  <div class="version">
-    バージョン: 0.4.2
   </div>
 
   <script>
