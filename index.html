@@ -2,21 +2,26 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>v1を読み込み</title>
+  <title>v1 表示</title>
   <style>
-    html, body {
+    body, html {
       margin: 0;
       padding: 0;
       height: 100%;
     }
     iframe {
       width: 100%;
-      height: 100%;
+      height: 100vh;
       border: none;
     }
   </style>
 </head>
 <body>
-  <iframe src="index/v1.html"></iframe>
+  <script>
+    alert("著作権的にほぼアウトなので自己責任で見てください");
+    const iframe = document.createElement("iframe");
+    iframe.src = "index/v1.html";
+    document.body.appendChild(iframe);
+  </script>
 </body>
 </html>
