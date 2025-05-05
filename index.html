@@ -20,13 +20,10 @@
     .search-box {
       margin-bottom: 30px;
       text-align: center;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
     }
 
-    .search-box input,
-    .search-box select {
+    .search-box input {
+      width: 80%;
       padding: 12px;
       font-size: 16px;
       border-radius: 8px;
@@ -34,10 +31,22 @@
       transition: border-color 0.2s;
     }
 
-    .search-box input:focus,
-    .search-box select:focus {
+    .search-box input:focus {
       outline: none;
       border-color: #007acc;
+    }
+
+    .sort-order {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .sort-order select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      transition: border-color 0.2s;
     }
 
     .card {
@@ -122,8 +131,7 @@
         color: #5ab4ff;
       }
 
-      .search-box input,
-      .search-box select {
+      .search-box input {
         background-color: #1e1e1e;
         color: #e0e0e0;
         border: 1px solid #444;
@@ -135,9 +143,12 @@
   <div class="container">
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="動画タイトルを検索...">
-      <select id="dateFilter">
-        <option value="">すべての日付</option>
-        <!-- 日付のオプションはJavaScriptで動的に挿入します -->
+    </div>
+
+    <div class="sort-order">
+      <select id="sortOrder">
+        <option value="asc">昇順（古い順）</option>
+        <option value="desc">降順（新しい順）</option>
       </select>
     </div>
 
@@ -170,24 +181,11 @@
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' }
     ];
 
-    // 日付順でソート
-    videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    // 日付のフィルタリングオプションを作成
-    const dateFilter = document.getElementById("dateFilter");
-    const allDates = [...new Set(videoData.map(video => video.date))];
-    allDates.forEach(date => {
-      const option = document.createElement("option");
-      option.value = date;
-      option.textContent = date;
-      dateFilter.appendChild(option);
-    });
-
     // 動画カード作成
     const videoList = document.getElementById('videoList');
-    function createVideoCards(filteredData) {
-      videoList.innerHTML = ''; // 既存のカードを削除
-      filteredData.forEach(video => {
+    function createVideoCards(sortedData) {
+      videoList.innerHTML = ''; // 一度リストをリセット
+      sortedData.forEach(video => {
         const card = document.createElement('div');
         card.classList.add('card');
         const link = document.createElement('a');
@@ -199,30 +197,24 @@
       });
     }
 
-    // 初期表示
+    // 並べ替え機能
+    const sortOrder = document.getElementById('sortOrder');
+    sortOrder.addEventListener('change', function() {
+      const order = sortOrder.value;
+      let sortedData = [...videoData];
+
+      // 昇順または降順でソート
+      sortedData.sort((a, b) => {
+        return order === 'asc' 
+          ? new Date(a.date) - new Date(b.date) 
+          : new Date(b.date) - new Date(a.date);
+      });
+
+      createVideoCards(sortedData);
+    });
+
+    // 初期表示は降順
     createVideoCards(videoData);
-
-    // 検索機能
-    const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("input", function() {
-      const query = searchInput.value.toLowerCase();
-      const filteredData = videoData.filter(video =>
-        video.title.toLowerCase().includes(query)
-      );
-      createVideoCards(filteredData);
-    });
-
-    // 日付フィルタリング機能
-    dateFilter.addEventListener("change", function() {
-      const selectedDate = dateFilter.value;
-      let filteredData = videoData;
-
-      if (selectedDate) {
-        filteredData = videoData.filter(video => video.date === selectedDate);
-      }
-
-      createVideoCards(filteredData);
-    });
   </script>
 </body>
 </html>
