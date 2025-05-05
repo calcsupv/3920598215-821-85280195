@@ -36,19 +36,6 @@
       border-color: #007acc;
     }
 
-    .sort-order {
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .sort-order select {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      transition: border-color 0.2s;
-    }
-
     .card {
       background: white;
       border-radius: 8px;
@@ -145,13 +132,6 @@
       <input type="text" id="searchInput" placeholder="動画タイトルを検索...">
     </div>
 
-    <div class="sort-order">
-      <select id="sortOrder">
-        <option value="asc">昇順（古い順）</option>
-        <option value="desc">降順（新しい順）</option>
-      </select>
-    </div>
-
     <div id="videoList"></div>
 
     <div class="contact">
@@ -181,40 +161,36 @@
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' }
     ];
 
+    // 日付順でソート
+    videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
     // 動画カード作成
     const videoList = document.getElementById('videoList');
-    function createVideoCards(sortedData) {
-      videoList.innerHTML = ''; // 一度リストをリセット
-      sortedData.forEach(video => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        const link = document.createElement('a');
-        link.href = video.url;
-        link.target = "_blank";
-        link.textContent = `${video.date} - ${video.title}`;
-        card.appendChild(link);
-        videoList.appendChild(card);
-      });
-    }
-
-    // 並べ替え機能
-    const sortOrder = document.getElementById('sortOrder');
-    sortOrder.addEventListener('change', function() {
-      const order = sortOrder.value;
-      let sortedData = [...videoData];
-
-      // 昇順または降順でソート
-      sortedData.sort((a, b) => {
-        return order === 'asc' 
-          ? new Date(a.date) - new Date(b.date) 
-          : new Date(b.date) - new Date(a.date);
-      });
-
-      createVideoCards(sortedData);
+    videoData.forEach(video => {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      const link = document.createElement('a');
+      link.href = video.url;
+      link.target = "_blank";
+      link.textContent = `${video.date} - ${video.title}`;
+      card.appendChild(link);
+      videoList.appendChild(card);
     });
 
-    // 初期表示は降順
-    createVideoCards(videoData);
+    // 検索機能
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", function() {
+      const query = searchInput.value.toLowerCase();
+      const cards = document.querySelectorAll(".card");
+      cards.forEach(card => {
+        const title = card.querySelector("a").textContent.toLowerCase();
+        if (title.includes(query)) {
+          card.classList.remove("hide");
+        } else {
+          card.classList.add("hide");
+        }
+      });
+    });
   </script>
 </body>
 </html>
