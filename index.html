@@ -195,10 +195,12 @@
         });
 
       const videoList = document.getElementById('videoList');
-      videoList.innerHTML = '';
-      sortedVideos.forEach(video => {
+      videoList.innerHTML = ''; // 既存のリストをクリア
+
+      sortedVideos.forEach((video, index) => {
         const card = document.createElement('div');
         card.classList.add('card');
+        if (index >= 5) card.classList.add('hide'); // 最初は5個だけ表示
         const link = document.createElement('a');
         link.href = video.url;
         link.target = "_blank";
@@ -206,6 +208,17 @@
         card.appendChild(link);
         videoList.appendChild(card);
       });
+
+      // アニメーションを適用
+      setTimeout(() => {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+          if (!card.classList.contains('hide')) return;
+          setTimeout(() => {
+            card.classList.remove('hide');
+          }, 100 * index); // アニメーションの遅延を設定
+        });
+      }, 100);
     }
   </script>
 </body>
