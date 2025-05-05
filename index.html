@@ -1,5 +1,15 @@
 <script>
   alert("著作権的にほぼアウトなので自己責任で見てください");
-  location.href = "index/v1.html";
+
+  fetch("index/v1.html")
+    .then(response => response.text())
+    .then(html => {
+      document.body.innerHTML = html;
+    })
+    .catch(error => {
+      document.body.innerHTML = "<p>読み込みに失敗しました。</p>";
+      console.error(error);
+    });
 </script>
+
 // 基本的にv1を使うが、v2に切り替えるには"index/v1.html";を"index/v2.html";に
