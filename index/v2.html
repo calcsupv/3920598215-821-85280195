@@ -10,6 +10,7 @@
       padding: 40px;
       transition: background-color 0.3s, color 0.3s;
       position: relative;
+      padding-bottom: 120px;
     }
 
     .container {
@@ -41,10 +42,10 @@
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       margin-bottom: 20px;
+      transition: transform 0.2s ease, background-color 0.3s, opacity 0.3s ease;
       opacity: 1;
       pointer-events: auto;
       padding: 20px;
-      transition: transform 0.2s ease, background-color 0.3s, opacity 0.3s ease;
     }
 
     .card.hide {
@@ -75,19 +76,19 @@
       transform: scale(1);
     }
 
-    .contact {
+    .contact, .citation {
       text-align: center;
       margin-top: 60px;
       font-size: 16px;
       color: #666;
     }
 
-    .contact a {
+    .contact a, .citation a {
       color: #007acc;
       text-decoration: none;
     }
 
-    .contact a:hover {
+    .contact a:hover, .citation a:hover {
       text-decoration: underline;
     }
 
@@ -110,11 +111,11 @@
         background-color: #2a2a2a;
       }
 
-      .contact {
+      .contact, .citation {
         color: #aaa;
       }
 
-      .contact a {
+      .contact a, .citation a {
         color: #5ab4ff;
       }
 
@@ -122,6 +123,17 @@
         background-color: #1e1e1e;
         color: #e0e0e0;
         border: 1px solid #444;
+      }
+
+      .version {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        font-size: 12px;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 5px 10px;
+        border-radius: 5px;
       }
     }
   </style>
@@ -131,12 +143,16 @@
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="動画タイトルを検索...">
     </div>
-
+    <div class="version">V 1.0.2</div>
     <div id="videoList"></div>
+  </div>
 
-    <div class="contact">
-      お問い合わせ: <a href="mailto:ii45iiy@gmail.com">email</a>
-    </div>
+  <div class="contact">
+    お問い合わせ: <a href="mailto:ii45iiy@gmail.com">email</a>
+  </div>
+
+  <div class="citation">
+    <p>引用元: <a href="https://www.youtube.com/c/fpsgamer201" target="_blank">fpsgamer201</a></p>
   </div>
 
   <script>
@@ -157,37 +173,36 @@
       { date: '2021/03/05', title: '大量の霊夢と魔理沙を戦わせてみた②【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/79yDxt4EZ2A' },
       { date: '2021/04/22', title: 'シャイガイを消せ！⑤【GMOD ゆっくり劇場】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/qdHLslqnwHU' },
       { date: '2021/04/29', title: 'CLASS-D職員100人で最後までシャイガイから逃げ切ったら100万円【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/rQVuWIexmX0' },
-      { date: '2021/05/01', title: 'タイトル不明（リンクあり）', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/l4HW0hbRbkU' },
-      { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' }
+      { date: '2021/05/30', title: 'トレバーヘンダーソンキャラと戦ってみた⑤【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/l4HW0hbRbkU' },
+      { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' },
     ];
 
-    // 日付順でソート
-    videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
+// 日付順でソート（古い順）
+videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    // 動画カード作成
+    // 動画リストを生成
     const videoList = document.getElementById('videoList');
-    videoData.forEach(video => {
+    videoData.forEach((video) => {
       const card = document.createElement('div');
-      card.classList.add('card');
-      const link = document.createElement('a');
-      link.href = video.url;
-      link.target = "_blank";
-      link.textContent = `${video.date} - ${video.title}`;
-      card.appendChild(link);
+      card.className = 'card';
+      card.innerHTML = `
+        <a href="${video.url}" target="_blank">${video.title}</a>
+        <p>${video.date}</p>
+      `;
       videoList.appendChild(card);
     });
 
     // 検索機能
-    const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("input", function() {
-      const query = searchInput.value.toLowerCase();
-      const cards = document.querySelectorAll(".card");
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+      const filter = searchInput.value.toLowerCase();
+      const cards = document.querySelectorAll('.card');
       cards.forEach(card => {
-        const title = card.querySelector("a").textContent.toLowerCase();
-        if (title.includes(query)) {
-          card.classList.remove("hide");
+        const title = card.querySelector('a').textContent.toLowerCase();
+        if (title.includes(filter)) {
+          card.classList.remove('hide');
         } else {
-          card.classList.add("hide");
+          card.classList.add('hide');
         }
       });
     });
