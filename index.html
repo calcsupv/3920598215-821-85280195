@@ -36,6 +36,15 @@
       border-color: #007acc;
     }
 
+    .search-box select {
+      padding: 12px;
+      font-size: 16px;
+      margin-left: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
     .card {
       background: white;
       border-radius: 8px;
@@ -130,6 +139,10 @@
   <div class="container">
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="動画タイトルを検索...">
+      <select id="sortSelect">
+        <option value="asc">昇順</option>
+        <option value="desc">降順</option>
+      </select>
     </div>
 
     <div id="videoList"></div>
@@ -162,34 +175,47 @@
     ];
 
     // 日付順でソート
-    videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    const sortVideos = (order) => {
+      if (order === "asc") {
+        return videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
+      } else {
+        return videoData.sort((a, b) => new Date(b.date) - new Date(a.date));
+      }
+    };
 
     // 動画カード作成
     const videoList = document.getElementById('videoList');
-    videoData.forEach(video => {
-      const card = document.createElement('div');
-      card.classList.add('card');
-      const link = document.createElement('a');
-      link.href = video.url;
-      link.target = "_blank";
-      link.textContent = `${video.date} - ${video.title}`;
-      card.appendChild(link);
-      videoList.appendChild(card);
-    });
+    const renderVideos = (sortedData) => {
+      videoList.innerHTML = '';
+      sortedData.forEach(video => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        const link = document.createElement('a');
+        link.href = video.url;
+        link.target = "_blank";
+        link.textContent = `${video.date} - ${video.title}`;
+        card.appendChild(link);
+        videoList.appendChild(card);
+      });
+    };
+
+    // 初期表示
+    renderVideos(videoData);
 
     // 検索機能
     const searchInput = document.getElementById("searchInput");
     searchInput.addEventListener("input", function() {
       const query = searchInput.value.toLowerCase();
-      const cards = document.querySelectorAll(".card");
-      cards.forEach(card => {
-        const title = card.querySelector("a").textContent.toLowerCase();
-        if (title.includes(query)) {
-          card.classList.remove("hide");
-        } else {
-          card.classList.add("hide");
-        }
-      });
+      const filteredData = videoData.filter(video => video.title.toLowerCase().includes(query));
+      const selectedSortOrder = document.getElementById("sortSelect").value;
+      renderVideos(sortVideos(selectedSortOrder));
+    });
+
+    // 並べ替え機能
+    const sortSelect = document.getElementById("sortSelect");
+    sortSelect.addEventListener("change", function() {
+      const selectedSortOrder = sortSelect.value;
+      renderVideos(sortVideos(selectedSortOrder));
     });
   </script>
 </body>
