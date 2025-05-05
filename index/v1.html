@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-
-
-
   <meta charset="UTF-8">
   <style>
     body {
@@ -13,6 +10,7 @@
       padding: 40px;
       transition: background-color 0.3s, color 0.3s;
       position: relative;
+      padding-bottom: 80px; /* 下部余白を確保 */
     }
 
     .container {
@@ -126,17 +124,17 @@
         color: #e0e0e0;
         border: 1px solid #444;
       }
-      
-       .version {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            font-size: 12px;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
+
+      .version {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        font-size: 12px;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
     }
   </style>
 </head>
@@ -145,15 +143,12 @@
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="動画タイトルを検索...">
     </div>
-    
-
-<div class="version">V 1.0</div>
+    <div class="version">V 1.0</div>
     <div id="videoList"></div>
+  </div>
 
-    <div class="contact">
-    </div>
-      <div class="contact">
-      お問い合わせ: <a href="mailto:ii45iiy@gmail.com">email</a>
+  <div class="contact">
+    お問い合わせ: <a href="mailto:ii45iiy@gmail.com">ii45iiy@gmail.com</a>
   </div>
 
   <script>
@@ -176,39 +171,34 @@
       { date: '2021/04/29', title: 'CLASS-D職員100人で最後までシャイガイから逃げ切ったら100万円【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/rQVuWIexmX0' },
       { date: '2021/05/30', title: 'トレバーヘンダーソンキャラと戦ってみた⑤【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/l4HW0hbRbkU' },
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' },
-      { date: '2020/10/31', title: '8体の強化SCPを倒せ！①【GMOD ゆっくり実況】', url: 'https://drive.google.com/file/d/1KZS-RNVlphtmC_IvyzQX0NTVENn2VPLG/preview' },
-      { date: '2020/10/31', title: 'デスゲームを主催してみた【GMOD ゆっくり実況】', url: 'https://drive.google.com/file/d/1sV6txXTxiS8fqr-5x63JrBHKkiH-4OOx/preview' },
-      { date: '2020/10/31', title: 'シャイガイを消せ！⑤【GMOD ゆっくり劇場】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/qdHLslqnwHU' },
-      { date: '2021/01/10', title: '承太郎とDIOをSCPたちと戦わせてみた【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/7N7h78vs0HI' },
     ];
 
     // 日付順でソート
-    videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    videoData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    // 動画カード作成
+    // 動画リストを生成
     const videoList = document.getElementById('videoList');
-    videoData.forEach(video => {
+    videoData.forEach((video) => {
       const card = document.createElement('div');
-      card.classList.add('card');
-      const link = document.createElement('a');
-      link.href = video.url;
-      link.target = "_blank";
-      link.textContent = `${video.date} - ${video.title}`;
-      card.appendChild(link);
+      card.className = 'card';
+      card.innerHTML = `
+        <a href="${video.url}" target="_blank">${video.title}</a>
+        <p>${video.date}</p>
+      `;
       videoList.appendChild(card);
     });
 
     // 検索機能
-    const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("input", function() {
-      const query = searchInput.value.toLowerCase();
-      const cards = document.querySelectorAll(".card");
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+      const filter = searchInput.value.toLowerCase();
+      const cards = document.querySelectorAll('.card');
       cards.forEach(card => {
-        const title = card.querySelector("a").textContent.toLowerCase();
-        if (title.includes(query)) {
-          card.classList.remove("hide");
+        const title = card.querySelector('a').textContent.toLowerCase();
+        if (title.includes(filter)) {
+          card.classList.remove('hide');
         } else {
-          card.classList.add("hide");
+          card.classList.add('hide');
         }
       });
     });
