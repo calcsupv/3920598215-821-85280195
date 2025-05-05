@@ -62,7 +62,8 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
-      transition: opacity 0.3s ease, height 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+      transition: opacity 0.3s ease, height 0s ease, margin 0s ease, padding 0s ease;
+      display: none;
     }
 
     .card a {
@@ -170,6 +171,8 @@
     ];
 
     let sortOrder = "asc";
+    let debounceTimeout;
+
     displayVideos();
 
     document.getElementById("sortOrder").addEventListener("change", function() {
@@ -178,7 +181,8 @@
     });
 
     document.getElementById("searchInput").addEventListener("input", function() {
-      displayVideos();
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(displayVideos, 300);
     });
 
     function displayVideos() {
@@ -205,13 +209,6 @@
         card.appendChild(link);
         videoList.appendChild(card);
       });
-
-      setTimeout(() => {
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
-          card.classList.remove('hide');
-        });
-      }, 100);
     }
   </script>
 </body>
