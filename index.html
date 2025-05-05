@@ -169,17 +169,14 @@
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' }
     ];
 
-    // 初期表示（ソート順は昇格に設定）
     let sortOrder = "asc";
     displayVideos();
 
-    // 昇格/降格の変更
     document.getElementById("sortOrder").addEventListener("change", function() {
       sortOrder = this.value;
       displayVideos();
     });
 
-    // 検索機能
     document.getElementById("searchInput").addEventListener("input", function() {
       displayVideos();
     });
@@ -195,12 +192,12 @@
         });
 
       const videoList = document.getElementById('videoList');
-      videoList.innerHTML = ''; // 既存のリストをクリア
+      videoList.innerHTML = '';
 
       sortedVideos.forEach((video, index) => {
         const card = document.createElement('div');
         card.classList.add('card');
-        if (index >= 5) card.classList.add('hide'); // 最初は5個だけ表示
+        if (index >= 5) card.classList.add('hide');
         const link = document.createElement('a');
         link.href = video.url;
         link.target = "_blank";
@@ -209,14 +206,10 @@
         videoList.appendChild(card);
       });
 
-      // アニメーションを適用
       setTimeout(() => {
         const cards = document.querySelectorAll('.card');
-        cards.forEach((card, index) => {
-          if (!card.classList.contains('hide')) return;
-          setTimeout(() => {
-            card.classList.remove('hide');
-          }, 100 * index); // アニメーションの遅延を設定
+        cards.forEach(card => {
+          card.classList.remove('hide');
         });
       }, 100);
     }
