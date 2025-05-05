@@ -36,35 +36,25 @@
       border-color: #007acc;
     }
 
-    .search-box select {
-      padding: 12px;
-      font-size: 16px;
-      margin-left: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
     .card {
       background: white;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       margin-bottom: 20px;
-      transition: transform 0.2s ease, background-color 0.3s, opacity 0.3s ease;
       opacity: 1;
       pointer-events: auto;
       padding: 20px;
-      max-height: 200px;
+      transition: transform 0.2s ease, background-color 0.3s, opacity 0.3s ease;
     }
 
     .card.hide {
       opacity: 0;
       pointer-events: none;
-      max-height: 0;
-      padding: 0;
+      height: 0;
       margin: 0;
+      padding: 0;
       overflow: hidden;
-      transition: opacity 0.3s ease, max-height 0s ease, padding 0s ease;
-      display: none; /* cardを完全に非表示 */
+      transition: opacity 0.3s ease, height 0.3s ease, margin 0.3s ease, padding 0.3s ease;
     }
 
     .card a {
@@ -79,6 +69,10 @@
     .card a:hover {
       color: #007acc;
       transform: scale(1.05);
+    }
+
+    .card a:active {
+      transform: scale(1);
     }
 
     .contact {
@@ -136,10 +130,6 @@
   <div class="container">
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="動画タイトルを検索...">
-      <select id="sortOrder">
-        <option value="asc">昇格</option>
-        <option value="desc">降格</option>
-      </select>
     </div>
 
     <div id="videoList"></div>
@@ -171,46 +161,36 @@
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' }
     ];
 
-    let sortOrder = "asc";
-    let debounceTimeout;
+    // 日付順でソート
+    videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    displayVideos();
-
-    document.getElementById("sortOrder").addEventListener("change", function() {
-      sortOrder = this.value;
-      displayVideos();
+    // 動画カード作成
+    const videoList = document.getElementById('videoList');
+    videoData.forEach(video => {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      const link = document.createElement('a');
+      link.href = video.url;
+      link.target = "_blank";
+      link.textContent = `${video.date} - ${video.title}`;
+      card.appendChild(link);
+      videoList.appendChild(card);
     });
 
-    document.getElementById("searchInput").addEventListener("input", function() {
-      clearTimeout(debounceTimeout);
-      debounceTimeout = setTimeout(displayVideos, 300);
-    });
-
-    function displayVideos() {
-      const query = document.getElementById("searchInput").value.toLowerCase();
-      const sortedVideos = [...videoData]
-        .filter(video => video.title.toLowerCase().includes(query))
-        .sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-        });
-
-      const videoList = document.getElementById('videoList');
-      videoList.innerHTML = '';
-
-      sortedVideos.forEach((video, index) => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        if (index >= 5) card.classList.add('hide');
-        const link = document.createElement('a');
-        link.href = video.url;
-        link.target = "_blank";
-        link.textContent = `${video.date} - ${video.title}`;
-        card.appendChild(link);
-        videoList.appendChild(card);
+    // 検索機能
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", function() {
+      const query = searchInput.value.toLowerCase();
+      const cards = document.querySelectorAll(".card");
+      cards.forEach(card => {
+        const title = card.querySelector("a").textContent.toLowerCase();
+        if (title.includes(query)) {
+          card.classList.remove("hide");
+        } else {
+          card.classList.add("hide");
+        }
       });
-    }
+    });
   </script>
 </body>
 </html>
