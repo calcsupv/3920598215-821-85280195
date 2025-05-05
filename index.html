@@ -23,7 +23,7 @@
     }
 
     .search-box input {
-      width: 70%;
+      width: 80%;
       padding: 12px;
       font-size: 16px;
       border-radius: 8px;
@@ -31,17 +31,7 @@
       transition: border-color 0.2s;
     }
 
-    .search-box select {
-      width: 20%;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-left: 10px;
-      transition: border-color 0.2s;
-    }
-
-    .search-box input:focus, .search-box select:focus {
+    .search-box input:focus {
       outline: none;
       border-color: #007acc;
     }
@@ -133,12 +123,6 @@
         color: #e0e0e0;
         border: 1px solid #444;
       }
-
-      .search-box select {
-        background-color: #1e1e1e;
-        color: #e0e0e0;
-        border: 1px solid #444;
-      }
     }
   </style>
 </head>
@@ -146,10 +130,6 @@
   <div class="container">
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="動画タイトルを検索...">
-      <select id="sortSelect">
-        <option value="asc">日付: 昇順</option>
-        <option value="desc">日付: 降順</option>
-      </select>
     </div>
 
     <div id="videoList"></div>
@@ -177,47 +157,39 @@
       { date: '2021/03/05', title: '大量の霊夢と魔理沙を戦わせてみた②【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/79yDxt4EZ2A' },
       { date: '2021/04/22', title: 'シャイガイを消せ！⑤【GMOD ゆっくり劇場】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/qdHLslqnwHU' },
       { date: '2021/04/29', title: 'CLASS-D職員100人で最後までシャイガイから逃げ切ったら100万円【GMOD ゆっくり実況】', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/rQVuWIexmX0' },
-      { date: '2021/05/01', title: '不明', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/l4HW0hbRbkU' },
+      { date: '2021/05/01', title: 'タイトル不明（リンクあり）', url: 'https://web.archive.org/web/1oe_/http://wayback-fakeurl.archive.org/yt/l4HW0hbRbkU' },
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' }
     ];
 
-    // 動画カード作成関数
-    const videoList = document.getElementById('videoList');
-    const createVideoCards = (videos) => {
-      videoList.innerHTML = '';
-      videos.forEach(video => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        const link = document.createElement('a');
-        link.href = video.url;
-        link.target = "_blank";
-        link.textContent = `${video.date} - ${video.title}`;
-        card.appendChild(link);
-        videoList.appendChild(card);
-      });
-    };
+    // 日付順でソート
+    videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    // 初期表示
-    createVideoCards(videoData);
+    // 動画カード作成
+    const videoList = document.getElementById('videoList');
+    videoData.forEach(video => {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      const link = document.createElement('a');
+      link.href = video.url;
+      link.target = "_blank";
+      link.textContent = `${video.date} - ${video.title}`;
+      card.appendChild(link);
+      videoList.appendChild(card);
+    });
 
     // 検索機能
     const searchInput = document.getElementById("searchInput");
     searchInput.addEventListener("input", function() {
       const query = searchInput.value.toLowerCase();
-      const filteredVideos = videoData.filter(video => video.title.toLowerCase().includes(query));
-      createVideoCards(filteredVideos);
-    });
-
-    // ソート機能
-    const sortSelect = document.getElementById("sortSelect");
-    sortSelect.addEventListener("change", function() {
-      const order = sortSelect.value;
-      const sortedVideos = [...videoData].sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return order === "asc" ? dateA - dateB : dateB - dateA;
+      const cards = document.querySelectorAll(".card");
+      cards.forEach(card => {
+        const title = card.querySelector("a").textContent.toLowerCase();
+        if (title.includes(query)) {
+          card.classList.remove("hide");
+        } else {
+          card.classList.add("hide");
+        }
       });
-      createVideoCards(sortedVideos);
     });
   </script>
 </body>
