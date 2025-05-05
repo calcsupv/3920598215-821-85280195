@@ -42,7 +42,6 @@
       margin-left: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      cursor: pointer;
     }
 
     .card {
@@ -78,10 +77,6 @@
     .card a:hover {
       color: #007acc;
       transform: scale(1.05);
-    }
-
-    .card a:active {
-      transform: scale(1);
     }
 
     .contact {
@@ -139,9 +134,9 @@
   <div class="container">
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="動画タイトルを検索...">
-      <select id="sortSelect">
-        <option value="asc">昇順</option>
-        <option value="desc">降順</option>
+      <select id="sortOrder">
+        <option value="asc">昇格</option>
+        <option value="desc">降格</option>
       </select>
     </div>
 
@@ -174,20 +169,34 @@
       { date: '2025/05/04', title: 'farewell アーカイブ', url: 'https://drive.google.com/file/d/1TNMWf75bdHjeFyWpNqMiCkmoqppweWww/preview' }
     ];
 
-    // 日付順でソート
-    const sortVideos = (order) => {
-      if (order === "asc") {
-        return videoData.sort((a, b) => new Date(a.date) - new Date(b.date));
-      } else {
-        return videoData.sort((a, b) => new Date(b.date) - new Date(a.date));
-      }
-    };
+    // 初期表示（ソート順は昇格に設定）
+    let sortOrder = "asc";
+    displayVideos();
 
-    // 動画カード作成
-    const videoList = document.getElementById('videoList');
-    const renderVideos = (sortedData) => {
+    // 昇格/降格の変更
+    document.getElementById("sortOrder").addEventListener("change", function() {
+      sortOrder = this.value;
+      displayVideos();
+    });
+
+    // 検索機能
+    document.getElementById("searchInput").addEventListener("input", function() {
+      displayVideos();
+    });
+
+    function displayVideos() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const sortedVideos = [...videoData]
+        .filter(video => video.title.toLowerCase().includes(query))
+        .sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+        });
+
+      const videoList = document.getElementById('videoList');
       videoList.innerHTML = '';
-      sortedData.forEach(video => {
+      sortedVideos.forEach(video => {
         const card = document.createElement('div');
         card.classList.add('card');
         const link = document.createElement('a');
@@ -197,26 +206,7 @@
         card.appendChild(link);
         videoList.appendChild(card);
       });
-    };
-
-    // 初期表示
-    renderVideos(videoData);
-
-    // 検索機能
-    const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("input", function() {
-      const query = searchInput.value.toLowerCase();
-      const filteredData = videoData.filter(video => video.title.toLowerCase().includes(query));
-      const selectedSortOrder = document.getElementById("sortSelect").value;
-      renderVideos(sortVideos(selectedSortOrder));
-    });
-
-    // 並べ替え機能
-    const sortSelect = document.getElementById("sortSelect");
-    sortSelect.addEventListener("change", function() {
-      const selectedSortOrder = sortSelect.value;
-      renderVideos(sortVideos(selectedSortOrder));
-    });
+    }
   </script>
 </body>
 </html>
